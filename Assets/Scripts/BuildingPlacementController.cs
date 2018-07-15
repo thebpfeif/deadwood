@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildingPlacementController : MonoBehaviour {
 
@@ -9,30 +10,36 @@ public class BuildingPlacementController : MonoBehaviour {
 
     private bool buildingPlacementActive; 
 
-	void Start () {
+	void Start()
+    {
         buildingPlacementActive = false; 
 	}
 	
-	void Update () {
+	void Update()
+    {
 
         if(Input.GetKeyDown(KeyCode.F))
         {
             Vector3 debugPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Debug.Log("Current Mouse Position: " + debugPos.x + ", " + debugPos.y + ", " + debugPos.z);
         }
-		// Poll for key event that requests a building placement.
-        if( Input.GetMouseButtonDown(0) && buildingPlacementActive )
+	
+	}
+
+    public void PlaceBuilding()
+    {
+        // Poll for key event that requests a building placement.
+        if (buildingPlacementActive)
         {
             Vector3 requestedPosition = Input.mousePosition;
             Vector3 newPosition;
 
             //Round the mouse position to the lower left corner of square we're currently in
             Ray ray = Camera.main.ScreenPointToRay(requestedPosition);
-            RaycastHit output; 
-
+            RaycastHit output;
 
             //Get the output of the raycast using physics model 
-            if(Physics.Raycast(ray, out output, 1000f))
+            if (Physics.Raycast(ray, out output, 1000f))
             {
                 newPosition = getCellPosition(output.point);
             }
@@ -45,15 +52,15 @@ public class BuildingPlacementController : MonoBehaviour {
             //Offset the building so it sets inside the cell space
             newPosition.x += 5;
             newPosition.y += 5;
-            newPosition.z += 5; 
+            newPosition.z += 5;
 
             GameObject newBuilding = (GameObject)Instantiate(Building);
             newBuilding.transform.parent = Map.transform;
             newBuilding.transform.position = newPosition;
         }
-	}
+    }
 
-    public void toggleBuildingPlacementActive()
+    public void ToggleBuildingPlacementActive()
     {
         buildingPlacementActive = !buildingPlacementActive;
     }

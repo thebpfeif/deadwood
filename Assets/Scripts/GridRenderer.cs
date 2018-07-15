@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class GridRenderer : MonoBehaviour {
+public class GridRenderer : MonoBehaviour, IPointerClickHandler {
 
     public GameObject Map;
     public GameObject GridSquare;
+    public GameObject BuildingEditor; 
 
     private GameObject gameGrid;
 
@@ -57,6 +59,15 @@ public class GridRenderer : MonoBehaviour {
             }
         }
 
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+        BuildingEditor.GetComponent<BuildingPlacementController>().PlaceBuilding();
+        Debug.Log("I've been clicked!");
+        }
     }
 
 }
