@@ -7,8 +7,10 @@ public class BuildingPlacementController : MonoBehaviour {
     public GameObject Map;
     public GameObject Building;
 
+    private bool buildingPlacementActive; 
+
 	void Start () {
-		
+        buildingPlacementActive = false; 
 	}
 	
 	void Update () {
@@ -19,7 +21,7 @@ public class BuildingPlacementController : MonoBehaviour {
             Debug.Log("Current Mouse Position: " + debugPos.x + ", " + debugPos.y + ", " + debugPos.z);
         }
 		// Poll for key event that requests a building placement.
-        if( Input.GetMouseButtonDown(0))
+        if( Input.GetMouseButtonDown(0) && buildingPlacementActive )
         {
             Vector3 requestedPosition = Input.mousePosition;
             Vector3 newPosition;
@@ -50,6 +52,11 @@ public class BuildingPlacementController : MonoBehaviour {
             newBuilding.transform.position = newPosition;
         }
 	}
+
+    public void toggleBuildingPlacementActive()
+    {
+        buildingPlacementActive = !buildingPlacementActive;
+    }
 
     //BRP TODO: Move this to a utility file 
     private Vector3 getCellPosition(Vector3 mousePosition)

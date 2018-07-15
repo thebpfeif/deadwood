@@ -51,6 +51,7 @@ public class GridRenderer : MonoBehaviour {
             for(int z = 0; z < size.y; z+=10)
             {
                 GameObject newCell = (GameObject)Instantiate(GridSquare);
+                newCell.transform.parent = Map.transform; 
                 Transform cellPos = newCell.GetComponent<Transform>();
                 cellPos.transform.position = new Vector3(x, 0, z);
             }
