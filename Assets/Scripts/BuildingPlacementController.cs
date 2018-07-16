@@ -6,9 +6,12 @@ using UnityEngine.EventSystems;
 public class BuildingPlacementController : MonoBehaviour {
 
     public GameObject Map;
-    public GameObject Building;
+    //public GameObject House;
+    //public GameObject Church;
+    //public GameObject Saloon;
 
-    private bool buildingPlacementActive; 
+    private bool buildingPlacementActive;
+    private GameObject buildingType; 
 
 	void Start()
     {
@@ -29,7 +32,7 @@ public class BuildingPlacementController : MonoBehaviour {
     public void PlaceBuilding()
     {
         // Poll for key event that requests a building placement.
-        if (buildingPlacementActive)
+        if (buildingType != null)
         {
             Vector3 requestedPosition = Input.mousePosition;
             Vector3 newPosition;
@@ -50,19 +53,29 @@ public class BuildingPlacementController : MonoBehaviour {
             Debug.Log("Place a building at: " + newPosition.x + ", " + newPosition.y + ", " + newPosition.z);
 
             //Offset the building so it sets inside the cell space
-            newPosition.x += 5;
-            newPosition.y += 5;
-            newPosition.z += 5;
-
-            GameObject newBuilding = (GameObject)Instantiate(Building);
+            Vector3 scale = buildingType.GetComponent<Transform>().localScale;
+            Vector3 offset = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
+            //newPosition += offset; 
+            
+            GameObject newBuilding = (GameObject)Instantiate(buildingType);
             newBuilding.transform.parent = Map.transform;
             newBuilding.transform.position = newPosition;
         }
     }
 
-    public void ToggleBuildingPlacementActive()
+    public void ToggleBuildingPlacementActive(GameObject building)
     {
-        buildingPlacementActive = !buildingPlacementActive;
+
+        // If the same building type is being requested, toggle building mode off. 
+        if( buildingType == building)
+        {
+            buildingType = null; 
+        }
+        else
+        {
+            buildingType = building;
+        }
+
     }
 
     //BRP TODO: Move this to a utility file 
